@@ -1,38 +1,67 @@
+/* App.css */
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.App-header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app-title {
+  font-weight: bold;
+  margin: 0;
 }
+
+.image-container {
+  margin-top: 70px; /* Adjust margin to give space for the navigation bar */
+  position: relative;
+  text-align: center;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.upload-button-label,
+.remove-button {
+  background-color: #e53935; /* Red background color for choose file */
+  color: #fff;
+  border: none;
+  padding: 8px 16px; /* Adjust padding to match the remove button */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px; /* Optional: Adjust font size to your preference */
+}
+
+.upload-button-label:hover,
+.remove-button:hover {
+  background-color: #c62828; /* Darker red for hover */
+}
+
+.upload-button-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.remove-button {
+  margin-top: 20px;
+}
+
