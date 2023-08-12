@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icon, Button, Sidebar, Menu } from 'semantic-ui-react';
 import './App.css';
 
+
 function App() {
     const [file, setFile] = useState(null);
 
@@ -26,9 +27,11 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h1 className="app-title">Image Dehazer V1</h1>
-            </header>
+            <Menu inverted className='App-header'>
+                <Menu.Item header className="app-title">
+                    Image Dehazer V1
+                </Menu.Item>
+            </Menu>
             {!file ? (
                 <div>
                     <label htmlFor="fileInput" className="upload-button-label">
@@ -52,4 +55,3 @@ function App() {
 }
 
 export default App;
-
