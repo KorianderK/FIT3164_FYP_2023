@@ -29,7 +29,7 @@ function App() {
         <div className="App">
             <Menu inverted className='App-header'>
                 <Menu.Item header className="app-title">
-                    Image Dehazer V1
+                    Image Dehazer V1.1
                 </Menu.Item>
             </Menu>
             {!file ? (
