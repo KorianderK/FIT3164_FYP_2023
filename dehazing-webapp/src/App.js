@@ -1,55 +1,27 @@
-import React, { useState } from 'react';
-import { Icon, Button, Sidebar, Menu } from 'semantic-ui-react';
-import './App.css';
-
+import React, {useState } from 'react';
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
+import Landing from './Landing';
+import Imageupload from './Imageupload';
+import 'semantic-ui-css/semantic.min.css';
+import './styles.css';
 
 function App() {
-    const [file, setFile] = useState(null);
+    const [toggle, setToggle] = useState(false);
 
-    function handleChange(e) {
-        const selectedFile = e.target.files[0];
-
-        if (selectedFile) {
-            const allowedExtensions = ['jpg', 'jpeg', 'png'];
-            const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
-
-            if (allowedExtensions.includes(fileExtension)) {
-                setFile(URL.createObjectURL(selectedFile));
-            } else {
-                window.alert('Invalid file type. Please select an image file.');
-            }
-        }
-    }
-
-    function handleRemove() {
-        setFile(null);
+    function toggleMenu () {
+        setToggle(!toggle);
     }
 
     return (
-        <div className="App">
-            <Menu inverted className='App-header'>
-                <Menu.Item header className="app-title">
-                    Image Dehazer V1.1
-                </Menu.Item>
-            </Menu>
-            {!file ? (
-                <div>
-                    <label htmlFor="fileInput" className="upload-button-label">
-                        <Icon name="file" className="upload-button-icon" />
-                        Choose Image
-                    </label>
-                    <input id="fileInput" type="file" accept=".jpg, .jpeg, .png" onChange={handleChange} hidden />
+        <div>
+            <Navbar onToggleMenu={toggleMenu} />
+            <div className='ui attached pushable' style={{height: '100vh'}}>
+                <Sidebar toggleMenu={toggle} />
+                <div className='pusher'>
+                    <Imageupload/>
                 </div>
-            ) : (
-                <div className="image-container">
-                    <p>Your Uploaded Image</p>
-                    <img src={file} alt="Uploaded" />
-                    <div></div>
-                    <Button className="remove-button" color="red" onClick={handleRemove}>
-                        Remove Upload
-                    </Button>
-                </div>
-            )}
+            </div>
         </div>
     );
 }
