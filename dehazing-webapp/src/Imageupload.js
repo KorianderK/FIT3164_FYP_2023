@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
 import './styles.css';
-// import axios from 'axios';
 
 function Imageupload() {
   const [file, setFile] = useState(null);
@@ -37,26 +36,30 @@ function Imageupload() {
       return;
     }
     setIsLoading(true);
-
+  
     try {
       const response = await fetch('http://127.0.0.1:5000/api/process-image', {
         method: 'POST',
         body: formData,
       });
-
+  
       if (response.status === 200) {
         const result = await response.blob();
-        setGrayedImage(URL.createObjectURL(result));
+        // Simulate a 1-second loading period
+        setTimeout(() => {
+          setGrayedImage(URL.createObjectURL(result));
+          setIsLoading(false); // Turn off loading indicator after the delay
+        }, 1000); // 1000 milliseconds = 3 seconds
       } else {
         console.error('Error processing the image.');
+        setIsLoading(false); // Turn off loading indicator in case of an error
       }
     } catch (error) {
       console.error('Error processing the image:', error);
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Turn off loading indicator in case of an error
     }
   };
-
+  
   return (
     <div className="App">
       {!file ? (
@@ -68,14 +71,14 @@ function Imageupload() {
           <input id="fileInput" type="file" name="image" accept=".jpg, .jpeg, .png" onChange={handleChange} hidden />
         </div>
       ) : (
-        <div className="image-container">
+        <div className="image-container fade-in">
           <p>Your Uploaded Image</p>
-          <img src={file} alt="Uploaded" />
+          <img src={file} alt="Uploaded" className="fade-in responsive-image"/>
           <div></div>
-          <Button className="remove-button" color="red" onClick={handleRemove}>
+          <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
             Remove Image
           </Button>
-          <Button className="process-button" onClick={handleProcessImage} disabled={isLoading}>
+          <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
             {isLoading ? 'Processing...' : 'Process Image'}
           </Button>
         </div>
@@ -83,9 +86,9 @@ function Imageupload() {
 
       {/* Display grayscale image if available */}
       {grayedImage && (
-        <div className="image-container">
-          <p>Grayscale Image</p>
-          <img src={grayedImage} alt="Grayscale" />
+        <div className="image-container fade-in">
+          <p>Grayscaled Image</p>
+          <img src={grayedImage} alt="Grayscale" className="fade-in responsive-image"/>
         </div>
       )}
     </div>
