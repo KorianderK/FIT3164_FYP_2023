@@ -50,7 +50,7 @@ import io
 from flask_cors import CORS  # Import the CORS module
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 # Function to convert an image to grayscale using OpenCV
 def convert_to_grayscale(image_bytes):
     try:

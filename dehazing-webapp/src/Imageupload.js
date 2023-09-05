@@ -30,7 +30,7 @@ function ImageUpload() {
       // Create a data URL from the Blob
       const imageUrl = URL.createObjectURL(blob);
 
-      console.log('Blob URL:', imageUrl);
+      console.log('After Blob URL:', imageUrl);
 
       // Set the grayscale image URL in your component state
       setGrayImage(imageUrl);
