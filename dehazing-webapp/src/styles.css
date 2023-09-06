@@ -44,7 +44,18 @@ body {
   margin-top: 10px; /* Adjust as needed */
 }
 
-.upload-button-label,
+.upload-button-label{
+  background-color: #7dcd5d;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
 .remove-button,
 .process-button {
   background-color: #e53935;
@@ -61,7 +72,7 @@ body {
 .upload-button-label:hover,
 .remove-button:hover,
 .process-button:hover {
-  background-color: #c62828;
+  background-color: #258e2c;
 }
 
 .upload-button-icon {
@@ -110,8 +121,13 @@ body {
 
 /* Set maximum width and height for the image */
 .resized-image {
-  max-width: auto;
-  max-height: auto;
+  max-width: 480px;
+  max-height: 720px;
   width: auto;
   height: auto;
+}
+
+.responsive-image {
+  max-width: 100%; /* Ensure the image doesn't exceed the width of its container */
+  height: auto;    /* Allow the height to adjust proportionally */
 }
