@@ -87,7 +87,7 @@ function Imageupload() {
       {/* Display grayscale image if available */}
       {grayedImage && (
         <div className="image-container fade-in">
-          <p>Grayscaled Image</p>
+          <p>DCP + CLAHE Dehazed Image</p>
           <img src={grayedImage} alt="Grayscale" className="fade-in responsive-image"/>
         </div>
       )}
