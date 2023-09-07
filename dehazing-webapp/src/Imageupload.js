@@ -72,7 +72,7 @@ function Imageupload() {
     const aspectRatio = calculateAspectRatio(image);
   
     // Now you have the aspectRatio value, which is width/height.
-    console.log('Aspect Ratio:', aspectRatio);
+    // console.log('Aspect Ratio:', aspectRatio);
   
     // Define the target dimensions based on the aspect ratio
     let targetWidth, targetHeight;
