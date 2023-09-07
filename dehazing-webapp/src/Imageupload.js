@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
+import ComparisonOverlay from './Comparisonoverlay';
 import './styles.css';
 
 function Imageupload() {
@@ -8,6 +9,12 @@ function Imageupload() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData] = useState(new FormData()); // Initialize formData
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+  const [showComparison, setShowComparison] = useState(false);
+
+  // Function to toggle the comparison overlay
+  const toggleComparisonOverlay = () => {
+    setShowComparison(!showComparison);
+  };
 
   const handleChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -131,12 +138,28 @@ function Imageupload() {
       {dehazedImage && (
         <div className="image-container fade-in">
           <p>DCP + CLAHE Dehazed Image</p>
-          <img src={dehazedImage} alt="DCP_Processed" className="fade-in resized-image" 
-          style={{
+          <img
+            src={dehazedImage}
+            alt="DCP_Processed"
+            className="fade-in resized-image"
+            style={{
               maxWidth: `${imageDimensions.width}px`,
               maxHeight: `${imageDimensions.height}px`,
-            }} />
+            }}
+          />
+          <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
+            Compare Images
+          </Button>
         </div>
+      )}
+
+      {/* Render the comparison overlay when showComparison is true */}
+      {showComparison && (
+        <ComparisonOverlay
+          originalImage={file}
+          processedImage={dehazedImage}
+          onClose={toggleComparisonOverlay}
+        />
       )}
     </div>
   );

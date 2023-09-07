@@ -131,3 +131,61 @@ body {
   max-width: 100%; /* Ensure the image doesn't exceed the width of its container */
   height: auto;    /* Allow the height to adjust proportionally */
 }
+
+/* ComparisonOverlay.css */
+.comparison-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.comparison-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+}
+
+.comparison-images {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.comparison-image {
+  text-align: center;
+  margin-right: 20px; /* Add margin between the images */
+}
+
+.comparison-image:last-child {
+  margin-right: 0; /* Remove margin from the last image to avoid extra spacing */
+}
+
+.comparison-image p {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.comparison-image img {
+  max-width: 100%;
+  height: auto;
+}
