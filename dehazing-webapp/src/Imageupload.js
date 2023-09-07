@@ -7,41 +7,51 @@ function Imageupload() {
   const [file, setFile] = useState(null);
   const [dehazedImage, setDehazedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData] = useState(new FormData()); // Initialize formData
+  const [formData] = useState(new FormData());
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [showComparison, setShowComparison] = useState(false);
+  
+
 
   // Function to toggle the comparison overlay
   const toggleComparisonOverlay = () => {
     setShowComparison(!showComparison);
   };
 
-  const handleChange = (e) => {
-    const selectedFile = e.target.files[0];
-
+  const handleChange = (selectedFile) => {
     if (selectedFile) {
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
       const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
 
       if (allowedExtensions.includes(fileExtension)) {
         setFile(URL.createObjectURL(selectedFile));
-        formData.set('image', selectedFile); // Update formData with the selected file
+        formData.set('image', selectedFile);
       } else {
         window.alert('Invalid file type. Please select an image file.');
       }
     }
   };
 
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const selectedFile = e.dataTransfer.files[0];
+    handleChange(selectedFile);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   const handleRemove = () => {
     setFile(null);
     setDehazedImage(null);
-    formData.delete('image'); // Remove the image from formData when removing it from the UI
-    setImageDimensions({ width: 0, height: 0 }); // Reset image dimensions
+    formData.delete('image');
+    setImageDimensions({ width: 0, height: 0 });
   };
 
   const handleProcessImage = async () => {
     if (!file) {
-      console.error('No image selected.'); // Log an error message
+      console.error('No image selected.');
       return;
     }
     setIsLoading(true);
@@ -54,22 +64,20 @@ function Imageupload() {
 
       if (response.status === 200) {
         const result = await response.blob();
-        // Simulate a 1-second loading period
         setTimeout(() => {
           setDehazedImage(URL.createObjectURL(result));
-          setIsLoading(false); // Turn off loading indicator after the delay
-        }, 200); // 1000 milliseconds = 3 seconds
+          setIsLoading(false);
+        }, 200);
       } else {
         console.error('Error processing the image.');
-        setIsLoading(false); // Turn off loading indicator in case of an error
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error processing the image:', error);
-      setIsLoading(false); // Turn off loading indicator in case of an error
+      setIsLoading(false);
     }
   };
 
-  // Function to calculate the aspect ratio
   const calculateAspectRatio = (image) => {
     return image.width / image.height;
   };
@@ -78,24 +86,17 @@ function Imageupload() {
     const image = e.target;
     const aspectRatio = calculateAspectRatio(image);
   
-    // Now you have the aspectRatio value, which is width/height.
-    // console.log('Aspect Ratio:', aspectRatio);
-  
-    // Define the target dimensions based on the aspect ratio
     let targetWidth, targetHeight;
   
     if (aspectRatio >= 1.3 && aspectRatio <= 2.39) {
-      // Landscape aspect ratio range (1.3 to 2.39)
       targetWidth = 720;
       targetHeight = 480;
     } else if (aspectRatio >= 1.0 && aspectRatio <= 1.3) {
-      // Portrait aspect ratio range (1.0 to 1.3)
       targetWidth = 480;
       targetHeight = 720;
     } else {
-      // If the aspect ratio doesn't fall into the specified ranges, use defaults
-      targetWidth = 720; // Default landscape width
-      targetHeight = 480; // Default landscape height
+      targetWidth = 720;
+      targetHeight = 480;
     }
   
     setImageDimensions({ width: targetWidth, height: targetHeight });
@@ -103,54 +104,60 @@ function Imageupload() {
 
   return (
     <div className="App">
-      {!file ? (
-        <div>
-          <label htmlFor="fileInput" className="upload-button-label">
-            <i className="search icon" />
-            Select Image
-          </label>
-          <input id="fileInput" type="file" name="image" accept=".jpg, .jpeg, .png" onChange={handleChange} hidden />
-        </div>
-      ) : (
-        <div className="image-container fade-in">
-          <p>Your Uploaded Image</p>
-          <img
-            src={file}
-            alt="Uploaded"
-            className="fade-in resized-image"
-            onLoad={handleImageLoad}
-            style={{
-              maxWidth: `${imageDimensions.width}px`,
-              maxHeight: `${imageDimensions.height}px`,
-            }}
-          />
-          <div></div>
-          <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
-            Remove Image
+    {!file ? (
+      <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver} >
+        <i className="upload icon"></i> {/* Semantic UI upload icon */}
+        <p>Drag & Drop an Image or</p>
+        <label htmlFor="fileInput" className='select-image-text'>
+          Select Image
+        </label>
+        <input
+          id="fileInput"
+          type="file"
+          name="image"
+          accept=".jpg, .jpeg, .png"
+          onChange={(e) => handleChange(e.target.files[0])}
+          hidden
+        />
+      </div>
+    ) : (
+      <div className="image-container fade-in">
+        <p>Your Uploaded Image</p>
+        <img
+          src={file}
+          alt="Uploaded"
+          className="fade-in resized-image"
+          onLoad={handleImageLoad}
+          style={{
+            maxWidth: `${imageDimensions.width}px`,
+            maxHeight: `${imageDimensions.height}px`,
+          }}
+        />
+        <div></div>
+        <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
+          Remove Image
+        </Button>
+        
+        {dehazedImage ? (
+          <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
+            Compare Images
           </Button>
-          
-          {dehazedImage ? ( // Conditionally render the buttons based on dehazedImage
-            <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
-              Compare Images
-            </Button>
-          ) : (
-            <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
-              {isLoading ? 'Processing...' : 'Process Image'}
-            </Button>
-          )}
-        </div>
-      )}
-      
-      {/* Render the comparison overlay when showComparison is true */}
-      {showComparison && (
-      <ComparisonOverlay
-        originalImage={file}
-        processedImage={dehazedImage}
-        onClose={toggleComparisonOverlay}
-        imageDimensions={imageDimensions} // Pass the imageDimensions state
-      />
+        ) : (
+          <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
+            {isLoading ? 'Processing...' : 'Process Image'}
+          </Button>
+        )}
+      </div>
     )}
 
+      {showComparison && (
+        <ComparisonOverlay
+          originalImage={file}
+          processedImage={dehazedImage}
+          onClose={toggleComparisonOverlay}
+          imageDimensions={imageDimensions}
+        />
+      )}
     </div>
   );
 }

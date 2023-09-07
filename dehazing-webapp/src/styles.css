@@ -3,7 +3,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .App {
@@ -23,37 +23,24 @@ body {
 
 .image-container {
   display: flex;
-  flex-direction: column; /* Change to column to stack items vertically */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: auto; /* Increase or decrease this margin as needed */
+  margin-top: auto;
   position: relative;
 }
 
 .image-container img {
   max-width: 100%;
   height: auto;
-  margin: 10px 0; /* Add margin to separate the images vertically */
+  margin: 10px 0;
 }
 
-/* Style for the button container */
 .button-container {
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10px; /* Adjust as needed */
-}
-
-.upload-button-label{
-  background-color: #7dcd5d;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 14px;
   margin-top: 10px;
 }
 
@@ -76,41 +63,7 @@ body {
   background-color: #258e2c;
 }
 
-.upload-button-icon {
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-.remove-button {
-  margin-top: 10px;
-}
-
-.process-button {
-  background-color: #53e253;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
-}
-
-/* Add a fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Add this CSS class for the button color transition */
-.fade-to-green {
-  transition: background-color 0.3s;
-}
-
+/* Add these styles to your existing CSS */
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -125,17 +78,16 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-/* Set maximum width and height for the image */
 .resized-image {
-  max-width: 480px;
-  max-height: 720px;
+  max-width: 380px;
+  max-height: 620px;
   width: auto;
   height: auto;
 }
 
 .responsive-image {
-  max-width: 100%; /* Ensure the image doesn't exceed the width of its container */
-  height: auto;    /* Allow the height to adjust proportionally */
+  max-width: 100%;
+  height: auto;
 }
 
 .comparison-overlay {
@@ -178,11 +130,11 @@ body {
 
 .comparison-image {
   text-align: center;
-  margin-right: 20px; /* Add margin between the images */
+  margin-right: 20px;
 }
 
 .comparison-image:last-child {
-  margin-right: 0; /* Remove margin from the last image to avoid extra spacing */
+  margin-right: 0;
 }
 
 .comparison-image p {
@@ -193,4 +145,29 @@ body {
 .comparison-image img {
   max-width: 100%;
   height: auto;
+}
+
+.select-image-text {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+  color: #0088f0;
+}
+
+/* Styles for the drag-and-drop area */
+.drop-area {
+  border: 2px dashed #bcbcbc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.drop-area p {
+  margin: 0;
+}
+
+.drop-area:hover {
+  background-color: #f4f4f4;
 }

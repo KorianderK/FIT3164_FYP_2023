@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 
 function ComparisonOverlay({ originalImage, processedImage, onClose }) {
+  
   return (
     <div className="comparison-overlay">
       <div className="comparison-content">
