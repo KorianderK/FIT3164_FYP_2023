@@ -1,7 +1,6 @@
 import React, {useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import Landing from './Landing';
 import Imageupload from './Imageupload';
 import 'semantic-ui-css/semantic.min.css';
 import './styles.css';

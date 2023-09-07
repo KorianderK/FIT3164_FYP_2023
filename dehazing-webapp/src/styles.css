@@ -3,6 +3,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .App {
@@ -25,7 +26,7 @@ body {
   flex-direction: column; /* Change to column to stack items vertically */
   align-items: center;
   justify-content: center;
-  margin-top: 70px;
+  margin-top: auto; /* Increase or decrease this margin as needed */
   position: relative;
 }
 
@@ -85,7 +86,7 @@ body {
 }
 
 .process-button {
-  background-color: #989898;
+  background-color: #53e253;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -137,7 +138,6 @@ body {
   height: auto;    /* Allow the height to adjust proportionally */
 }
 
-/* ComparisonOverlay.css */
 .comparison-overlay {
   position: fixed;
   top: 0;
