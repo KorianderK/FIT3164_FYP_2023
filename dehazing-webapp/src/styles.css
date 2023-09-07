@@ -105,6 +105,11 @@ body {
   }
 }
 
+/* Add this CSS class for the button color transition */
+.fade-to-green {
+  transition: background-color 0.3s;
+}
+
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 
-function ComparisonOverlay({ originalImage, processedImage, onClose }) {
+function ComparisonOverlay({ originalImage, processedImage, onClose, imageDimensions }) {
   return (
     <div className="comparison-overlay">
       <div className="comparison-content">
@@ -15,6 +15,10 @@ function ComparisonOverlay({ originalImage, processedImage, onClose }) {
               src={originalImage}
               alt="Original"
               className="resized-image"
+              style={{
+                maxWidth: `${imageDimensions.width}px`,
+                maxHeight: `${imageDimensions.height}px`,
+              }}
             />
           </div>
           <div className="comparison-image">
@@ -23,6 +27,10 @@ function ComparisonOverlay({ originalImage, processedImage, onClose }) {
               src={processedImage}
               alt="DCP-CLAHE"
               className="resized-image"
+              style={{
+                maxWidth: `${imageDimensions.width}px`,
+                maxHeight: `${imageDimensions.height}px`,
+              }}
             />
           </div>
         </div>

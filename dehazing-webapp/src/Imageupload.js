@@ -128,39 +128,29 @@ function Imageupload() {
           <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
             Remove Image
           </Button>
-          <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
-            {isLoading ? 'Processing...' : 'Process Image'}
-          </Button>
+          
+          {dehazedImage ? ( // Conditionally render the buttons based on dehazedImage
+            <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
+              Compare Images
+            </Button>
+          ) : (
+            <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
+              {isLoading ? 'Processing...' : 'Process Image'}
+            </Button>
+          )}
         </div>
       )}
-
-      {/* Display grayscale image if available */}
-      {dehazedImage && (
-        <div className="image-container fade-in">
-          <p>DCP + CLAHE Dehazed Image</p>
-          <img
-            src={dehazedImage}
-            alt="DCP_Processed"
-            className="fade-in resized-image"
-            style={{
-              maxWidth: `${imageDimensions.width}px`,
-              maxHeight: `${imageDimensions.height}px`,
-            }}
-          />
-          <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
-            Compare Images
-          </Button>
-        </div>
-      )}
-
+      
       {/* Render the comparison overlay when showComparison is true */}
       {showComparison && (
-        <ComparisonOverlay
-          originalImage={file}
-          processedImage={dehazedImage}
-          onClose={toggleComparisonOverlay}
-        />
-      )}
+      <ComparisonOverlay
+        originalImage={file}
+        processedImage={dehazedImage}
+        onClose={toggleComparisonOverlay}
+        imageDimensions={imageDimensions} // Pass the imageDimensions state
+      />
+    )}
+
     </div>
   );
 }
