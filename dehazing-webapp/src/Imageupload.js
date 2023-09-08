@@ -132,13 +132,14 @@ function Imageupload() {
             maxWidth: `${imageDimensions.width}px`,
             maxHeight: `${imageDimensions.height}px`,
           }}
+          
         />
-        <div></div>
         <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
           Remove Image
         </Button>
-        
+
         {dehazedImage ? (
+          
           <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
             Compare Images
           </Button>

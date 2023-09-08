@@ -193,7 +193,7 @@ def estimate_atmospheric_light(image, dark_channel, top_percentage=0.001):
     atmospheric_light = np.max(image.reshape(-1, 3)[top_indices], axis=0)
     return atmospheric_light
 
-def estimate_transmission(dark_channel, atmospheric_light, omega=0.70):
+def estimate_transmission(dark_channel, atmospheric_light, omega=0.65):
     """
     Estimate the transmission map of an image based on its dark channel and atmospheric light.
 
@@ -248,15 +248,34 @@ def enhance_visibility(hazy_image, transmission_map, atmospheric_light):
     enhanced_image = np.clip(estimated_scene_radiance, 0, 255).astype(np.uint8)
     return enhanced_image
 
-def apply_guided_filter(input_image, guided_image, radius=20, epsilon=0.1):
+# def estimate_omega(dark_channel, percentile=0.5):
+#     """
+#     Estimate omega (ω) adaptively based on the dark channel prior.
+    
+#     Args:
+#         dark_channel (numpy.ndarray): Dark channel prior of the hazy image.
+#         percentile (float): Percentile for thresholding.
+    
+#     Returns:
+#         float: Estimated ω value.
+#     """
+#     # Calculate the threshold based on the specified percentile
+#     threshold = np.percentile(dark_channel, percentile)
+    
+#     # Estimate ω based on the threshold
+#     omega = 1.0 / (1.0 + threshold)
+    
+#     return omega
+
+def apply_guided_filter(input_image, guided_image, radius=50, epsilon=0.02):
     """
     Apply a guided filter to enhance an input image using a guided image.
 
     Parameters:
         input_image (numpy.ndarray): The input image to be enhanced.
         guided_image (numpy.ndarray): The guided image used for guidance during filtering.
-        radius (int): The radius of the local window for filtering. Default is 20.
-        epsilon (float): A regularization parameter to stabilize filtering. Default is 0.1.
+        radius (int): The radius of the local window for filtering. Default is 50.
+        epsilon (float): A regularization parameter to stabilize filtering. Default is 0.02.
 
     Returns:
         numpy.ndarray: The enhanced image.
@@ -328,7 +347,7 @@ def process_image():
 
         # Calculate the divisor
         selected_divisor = calculate_divisor(blurred_image)
-        print(f"Selected Divisor: {selected_divisor}")
+        # print(f"Selected Divisor: {selected_divisor}")
 
         # Calculate the automatic window size
         window_size = automatic_window_size(blurred_image, selected_divisor)
@@ -348,11 +367,11 @@ def process_image():
         # Apply guided filter to the enhanced image
         guided_filtered_image = apply_guided_filter(enhanced, blurred_image)
 
-        # Convert guided_filtered_image to grayscale
-        gray_guided_filtered_image = cv2.cvtColor(guided_filtered_image, cv2.COLOR_BGR2GRAY)
+        # # Convert guided_filtered_image to grayscale
+        # gray_guided_filtered_image = cv2.cvtColor(guided_filtered_image, cv2.COLOR_BGR2GRAY)
 
-        # Apply Histogram Equalization
-        equalized_image = cv2.equalizeHist(gray_guided_filtered_image)
+        # # Apply Histogram Equalization
+        # equalized_image = cv2.equalizeHist(gray_guided_filtered_image)
 
         # Apply CLAHE to enhance both luminance and color
         enhanced_image = apply_clahe(guided_filtered_image, clip_limit=0.5, grid_size=(5, 5))

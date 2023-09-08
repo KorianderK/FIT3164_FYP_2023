@@ -4,7 +4,7 @@ import './styles.css';
 function ComparisonOverlay({ originalImage, processedImage, onClose }) {
   
   return (
-    <div className="comparison-overlay">
+    <div className="comparison-overlay ">
       <div className="comparison-content">
         <div className="close-button" onClick={onClose}>
           &times;
