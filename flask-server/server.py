@@ -200,7 +200,7 @@ def estimate_transmission(dark_channel, atmospheric_light, omega=0.65):
     Parameters:
         dark_channel (numpy.ndarray): The dark channel image of the input image.
         atmospheric_light (numpy.ndarray): The estimated atmospheric light as a 3-channel color vector.
-        omega (float): A weight factor for transmission calculation. Default is 0.90.
+        omega (float): A weight factor for transmission calculation. Default is 0.65.
 
     Returns:
         numpy.ndarray: The estimated transmission map as a grayscale image.
