@@ -193,14 +193,14 @@ def estimate_atmospheric_light(image, dark_channel, top_percentage=0.001):
     atmospheric_light = np.max(image.reshape(-1, 3)[top_indices], axis=0)
     return atmospheric_light
 
-def estimate_transmission(dark_channel, atmospheric_light, omega=0.65):
+def estimate_transmission(dark_channel, atmospheric_light, omega=0.75):
     """
     Estimate the transmission map of an image based on its dark channel and atmospheric light.
 
     Parameters:
         dark_channel (numpy.ndarray): The dark channel image of the input image.
         atmospheric_light (numpy.ndarray): The estimated atmospheric light as a 3-channel color vector.
-        omega (float): A weight factor for transmission calculation. Default is 0.65.
+        omega (float): A weight factor for transmission calculation. Default is 0.75.
 
     Returns:
         numpy.ndarray: The estimated transmission map as a grayscale image.
@@ -248,33 +248,14 @@ def enhance_visibility(hazy_image, transmission_map, atmospheric_light):
     enhanced_image = np.clip(estimated_scene_radiance, 0, 255).astype(np.uint8)
     return enhanced_image
 
-# def estimate_omega(dark_channel, percentile=0.5):
-#     """
-#     Estimate omega (ω) adaptively based on the dark channel prior.
-    
-#     Args:
-#         dark_channel (numpy.ndarray): Dark channel prior of the hazy image.
-#         percentile (float): Percentile for thresholding.
-    
-#     Returns:
-#         float: Estimated ω value.
-#     """
-#     # Calculate the threshold based on the specified percentile
-#     threshold = np.percentile(dark_channel, percentile)
-    
-#     # Estimate ω based on the threshold
-#     omega = 1.0 / (1.0 + threshold)
-    
-#     return omega
-
-def apply_guided_filter(input_image, guided_image, radius=50, epsilon=0.02):
+def apply_guided_filter(input_image, guided_image, radius=100, epsilon=1.02):
     """
     Apply a guided filter to enhance an input image using a guided image.
 
     Parameters:
         input_image (numpy.ndarray): The input image to be enhanced.
         guided_image (numpy.ndarray): The guided image used for guidance during filtering.
-        radius (int): The radius of the local window for filtering. Default is 50.
+        radius (int): The radius of the local window for filtering. Default is 70.
         epsilon (float): A regularization parameter to stabilize filtering. Default is 0.02.
 
     Returns:
@@ -328,6 +309,40 @@ def apply_clahe(image, clip_limit=0.5, grid_size=(5, 5)):
     
     return enhanced_image
 
+def brighten_image(image, brightness_factor=1.5):
+    """
+    Brighten an input image by scaling pixel values.
+    
+    Parameters:
+        image (numpy.ndarray): The input image to be brightened.
+        brightness_factor (float): The factor by which to brighten the image. Default is 1.5.
+    
+    Returns:
+        numpy.ndarray: The brightened image.
+    """
+    # Ensure the brightness factor is within a valid range
+    brightness_factor = max(0, brightness_factor)
+    
+    # Scale the image pixel values by the brightness factor
+    brightened_image = cv2.convertScaleAbs(image, alpha=brightness_factor, beta=0)
+    
+    return brightened_image
+
+def increase_contrast(image, alpha=2.0, beta=0):
+    """
+    Increase the overall contrast of an image using linear contrast adjustment.
+
+    Parameters:
+        image (numpy.ndarray): The input image to be contrast-adjusted.
+        alpha (float): Scaling factor for contrast adjustment. Default is 2.0.
+        beta (float): Offset factor for contrast adjustment. Default is 0.
+
+    Returns:
+        numpy.ndarray: The contrast-adjusted image.
+    """
+    contrast_adjusted_image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    return contrast_adjusted_image
+
 @app.route('/api/process-image', methods=['POST'])
 def process_image():
     if 'image' not in request.files:
@@ -367,17 +382,16 @@ def process_image():
         # Apply guided filter to the enhanced image
         guided_filtered_image = apply_guided_filter(enhanced, blurred_image)
 
-        # # Convert guided_filtered_image to grayscale
-        # gray_guided_filtered_image = cv2.cvtColor(guided_filtered_image, cv2.COLOR_BGR2GRAY)
-
-        # # Apply Histogram Equalization
-        # equalized_image = cv2.equalizeHist(gray_guided_filtered_image)
-
         # Apply CLAHE to enhance both luminance and color
-        enhanced_image = apply_clahe(guided_filtered_image, clip_limit=0.5, grid_size=(5, 5))
+        enhanced_image = apply_clahe(guided_filtered_image, clip_limit=0.7, grid_size=(15, 15))
+
+        # enhanced_bright_image = brighten_image(enhanced_image, brightness_factor=1.2)
+
+        contrast_image = increase_contrast(enhanced_image, alpha=1.15)
+
 
         # Encode the enhanced image as JPEG
-        _, encoded_image = cv2.imencode('.jpg', enhanced_image)
+        _, encoded_image = cv2.imencode('.jpg', contrast_image)
 
         # Create a BytesIO object to store the image
         image_buffer = BytesIO(encoded_image.tobytes())
