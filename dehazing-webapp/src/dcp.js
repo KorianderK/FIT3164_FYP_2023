@@ -3,7 +3,7 @@ import { Button } from 'semantic-ui-react';
 import ComparisonOverlay from './Comparisonoverlay';
 import './styles.css';
 
-function Imageupload() {
+function DCP() {
   const [file, setFile] = useState(null);
   const [dehazedImage, setDehazedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -107,6 +107,7 @@ function Imageupload() {
     {!file ? (
       <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver} >
         <i className="upload icon"></i> {/* Semantic UI upload icon */}
+        <h1>DCP + CLAHE Image Dehazer</h1>
         <p>Drag & Drop an Image or</p>
         <label htmlFor="fileInput" className='select-image-text'>
           Select Image
@@ -163,4 +164,4 @@ function Imageupload() {
   );
 }
 
-export default Imageupload;
+export default DCP;

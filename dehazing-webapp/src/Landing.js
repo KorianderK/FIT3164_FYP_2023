@@ -1,13 +1,12 @@
 import React from 'react';
 
-function Landing()  {
-
-    return (
-        <div>
-            <h1>Header</h1>
-            <div>Lorem ipsum</div>
-        </div>
-    );
+function Landingpage() {
+  return (
+    <div>
+      <h2>Home</h2>
+      <p>This is where everything begins.</p>
+    </div>
+  );
 }
 
-export default Landing;
+export default Landingpage;

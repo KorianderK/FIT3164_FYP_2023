@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 
 function Navbar(props)  {
 
@@ -9,23 +11,32 @@ function Navbar(props)  {
     };
 
       const textStyles = {
-        color: 'white', // Set text color to white
-        fontWeight: 'bold', // Set text to bold
+        color: 'white', 
+        fontWeight: 'bold', 
         fontSize: '25px',
-        margin: '0', // Remove default margin for <p> element
-        marginLeft: '8px', // Add margin to the left of the text
-        paddingTop: '10px', // Add padding to the top
-        paddingBottom: '10px' // Add padding to the bottom
+        margin: '0', 
+        marginLeft: '8px',
+        paddingTop: '10px',
+        paddingBottom: '10px'
+    };
+
+    // Function to handle link click and close sidebar
+    const handleLinkClick = () => {
+        props.closeSidebar(); // Call the closeSidebar function passed as a prop
+        props.setLoading(true);
     };
 
     return (
         <div className='ui top inverted attached menu' style={navbarStyle}>
-            <span className='item link grey' onClick={props.onToggleMenu}>
+          <span className='item link grey' onClick={props.onToggleMenu}>
             <i className='bars icon'></i>
-            </span>
-            <p style={textStyles}>Image Dehazer Webapp V1.3</p>
+          </span>
+          {/* Use the Link component to navigate to the landing page */}
+          <Link to='/landing' style={{ textDecoration: 'none' }} onClick={handleLinkClick} >
+            <p style={textStyles}>Image Dehazer Webapp V1.4</p>
+          </Link>
         </div>
-    );
-}
+      );
+    }
 
 export default Navbar;
