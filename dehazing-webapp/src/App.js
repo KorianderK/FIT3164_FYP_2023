@@ -11,7 +11,7 @@ import GAN from './gan';
 import Loading from './Loading';
 import 'semantic-ui-css/semantic.min.css';
 import './styles.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   const [toggle, setToggle] = useState(false);
@@ -52,6 +52,7 @@ function App() {
               <Loading />
             ) : (
               <Routes>
+                <Route path='/' element={<Navigate to='/home' replace />} />
                 <Route path='/home' element={<Landingpage />} />
                 <Route path='/landing' element={<Landingpage />} />
                 <Route path='/team' element={<Team />} />
