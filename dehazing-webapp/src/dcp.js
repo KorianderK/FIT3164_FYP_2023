@@ -10,12 +10,12 @@ function DCP() {
   const [formData] = useState(new FormData());
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [showComparison, setShowComparison] = useState(false);
-  
-
+  const [isBlurred, setIsBlurred] = useState(false); 
 
   // Function to toggle the comparison overlay
   const toggleComparisonOverlay = () => {
     setShowComparison(!showComparison);
+    setIsBlurred(!showComparison); // Toggle the blur background effect
   };
 
   const handleChange = (selectedFile) => {
@@ -77,6 +77,8 @@ function DCP() {
       setIsLoading(false);
     }
   };
+  
+  
 
   const calculateAspectRatio = (image) => {
     return image.width / image.height;
@@ -103,55 +105,55 @@ function DCP() {
   };
 
   return (
-    <div className="App">
-    {!file ? (
-      <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver} >
-        <i className="upload icon"></i> {/* Semantic UI upload icon */}
-        <h1>DCP + CLAHE Image Dehazer</h1>
-        <p>Drag & Drop an Image or</p>
-        <label htmlFor="fileInput" className='select-image-text'>
-          Select Image
-        </label>
-        <input
-          id="fileInput"
-          type="file"
-          name="image"
-          accept=".jpg, .jpeg, .png"
-          onChange={(e) => handleChange(e.target.files[0])}
-          hidden
-        />
-      </div>
-    ) : (
-      <div className="image-container fade-in">
-        <p>Your Uploaded Image</p>
-        <img
-          src={file}
-          alt="Uploaded"
-          className="fade-in resized-image"
-          onLoad={handleImageLoad}
-          style={{
-            maxWidth: `${imageDimensions.width}px`,
-            maxHeight: `${imageDimensions.height}px`,
-          }}
-          
-        />
-        <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
-          Remove Image
-        </Button>
-
-        {dehazedImage ? (
-          
-          <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
-            Compare Images
-          </Button>
+    <div>
+      <div className={`App ${isBlurred ? 'blur-background' : ''}`}>
+        {!file ? (
+          <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
+            <i className="upload icon"></i>
+            <h1>DCP + CLAHE Image Dehazer</h1>
+            <p>Drag & Drop an Image or</p>
+            <label htmlFor="fileInput" className='select-image-text'>
+              Select Image
+            </label>
+            <input
+              id="fileInput"
+              type="file"
+              name="image"
+              accept=".jpg, .jpeg, .png"
+              onChange={(e) => handleChange(e.target.files[0])}
+              hidden
+            />
+          </div>
         ) : (
-          <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
-            {isLoading ? 'Processing...' : 'Process Image'}
-          </Button>
+          <div className="image-container fade-in">
+            <p>Your Uploaded Image</p>
+            <img
+              src={file}
+              alt="Uploaded"
+              className="fade-in resized-image"
+              onLoad={handleImageLoad}
+              style={{
+                maxWidth: `${imageDimensions.width}px`,
+                maxHeight: `${imageDimensions.height}px`,
+              }}
+            />
+            <Button className="remove-button fade-in" color="red" onClick={handleRemove}>
+              Remove Image
+            </Button>
+  
+            {dehazedImage ? (
+              <Button className="compare-button fade-in" onClick={toggleComparisonOverlay}>
+                Compare Images
+              </Button>
+            ) : (
+              <Button className="process-button fade-in" onClick={handleProcessImage} disabled={isLoading}>
+                {isLoading ? 'Processing...' : 'Process Image'}
+              </Button>
+            )}
+          </div>
         )}
       </div>
-    )}
-
+  
       {showComparison && (
         <ComparisonOverlay
           originalImage={file}

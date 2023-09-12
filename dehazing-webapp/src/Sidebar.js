@@ -1,3 +1,4 @@
+// import React, { useEffect } from 'react';
 import React from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
@@ -20,11 +21,40 @@ function Sidebar(props) {
     fontSize: '18px',
   };
 
-  // Function to close the sidebar when a link is clicked
+  // Function to close the sidebar when a link is clicked and load
   function closeSidebar() {
     props.setLoading(true);
     props.toggleSidebar();
   }
+
+  // // Function to close the sidebar (For outside sidebar clicks.)
+  // function closeSidebarSB() {
+  //   props.toggleSidebar();   
+  // }
+
+  // // Function to close the sidebar when clicking outside
+  // const handleOutsideClick = (e) => {
+  //   if (props.toggleMenu) {
+  //     if (e.target.closest('.ui.sidebar') === null) {
+  //       closeSidebarSB();
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const handleOutsideClick = (e) => {
+  //     if (props.toggleMenu) {
+  //       if (e.target.closest('.ui.sidebar') === null) {
+  //         closeSidebarSB();
+  //       }
+  //     }
+  //   };
+  
+  //   document.addEventListener('mousedown', handleOutsideClick);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleOutsideClick);
+  //   };
+  // }, [props.toggleMenu, closeSidebarSB]);
 
   return (
     <div className={classes}>

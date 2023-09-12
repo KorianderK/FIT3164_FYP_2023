@@ -4,6 +4,7 @@ import './styles.css';
 function ComparisonOverlay({ originalImage, processedImage, onClose }) {
   
   return (
+
     <div className="comparison-overlay ">
       <div className="comparison-content">
         <div className="close-button" onClick={onClose}>
@@ -26,9 +27,18 @@ function ComparisonOverlay({ originalImage, processedImage, onClose }) {
               className="resized-image"
             />
           </div>
+          <div><h3>Dehazing Performance Metrics</h3>
+          <p>Structural Similarity Index:</p>
+          <p>Peak Signal-to-Noise Ratio:</p>
+          <p>Mean Squared Error:</p>
+          <p>Entropy (Original):</p>
+          <p>Entropy (Dehazed):</p>
+          </div>
+
         </div>
       </div>
     </div>
+
   );
 }
 

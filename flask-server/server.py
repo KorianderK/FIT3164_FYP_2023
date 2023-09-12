@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify, send_file
 import cv2
+import json
 import numpy as np
 from flask_cors import CORS
 from io import BytesIO
+from skimage import io, color, img_as_float
+from skimage.metrics import structural_similarity as ssim
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -343,6 +346,74 @@ def increase_contrast(image, alpha=2.0, beta=0):
     contrast_adjusted_image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
     return contrast_adjusted_image
 
+#************************** PERFORMANCE METRICS **************************
+# Modify the function signatures to accept image arrays instead of file paths
+def calculate_ssim(original_image, dehazed_image):
+    # No need to load images, use the provided image arrays directly
+
+    # Convert images to grayscale if necessary
+    if original_image.shape[-1] == 3:
+        original_image = color.rgb2gray(original_image)
+    if dehazed_image.shape[-1] == 3:
+        dehazed_image = color.rgb2gray(dehazed_image)
+
+    # Ensure both images have the same data type and range
+    original_image = img_as_float(original_image)
+    dehazed_image = img_as_float(dehazed_image)
+
+    # Calculate SSIM with data_range specified as 1.0 for floating-point images
+    ssim_value = ssim(original_image, dehazed_image, data_range=1.0)
+
+    return ssim_value
+
+def calculate_psnr(original_image, dehazed_image):
+    # No need to load images, use the provided image arrays directly
+
+    # Ensure both images have the same shape and data type
+    if original_image.shape != dehazed_image.shape:
+        raise ValueError("Both images should have the same dimensions.")
+
+    # Calculate the Mean Squared Error (MSE)
+    mse = np.mean((original_image - dehazed_image) ** 2)
+
+    # Calculate the maximum pixel value (assuming pixel values are in the range [0, 255])
+    max_pixel_value = 255.0
+
+    # Calculate the PSNR
+    psnr = 20 * np.log10(max_pixel_value / np.sqrt(mse))
+
+    return psnr
+
+def calculate_mse(original_image, dehazed_image):
+    # No need to load images, use the provided image arrays directly
+
+    # Ensure both images have the same shape and data type
+    if original_image.shape != dehazed_image.shape:
+        raise ValueError("Both images should have the same dimensions.")
+
+    # Calculate the Mean Squared Error (MSE)
+    mse = np.mean((original_image - dehazed_image) ** 2)
+
+    return mse
+
+def calculate_entropy(image):
+    # No need to load images, use the provided image array directly
+
+    # Convert the image to grayscale if necessary
+    if image.shape[-1] == 3:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Calculate the histogram of the image
+    histogram = cv2.calcHist([image], [0], None, [256], [0, 256])
+
+    # Normalize the histogram
+    histogram /= histogram.sum()
+
+    # Calculate entropy
+    entropy = -np.sum(histogram * np.log2(histogram + np.finfo(float).eps))
+
+    return entropy
+
 @app.route('/api/process-image', methods=['POST'])
 def process_image():
     if 'image' not in request.files:
@@ -386,9 +457,28 @@ def process_image():
         enhanced_image = apply_clahe(guided_filtered_image, clip_limit=0.7, grid_size=(15, 15))
 
         # enhanced_bright_image = brighten_image(enhanced_image, brightness_factor=1.2)
-
         contrast_image = increase_contrast(enhanced_image, alpha=1.15)
 
+        # Calculate SSIM, PSNR, MSE, and entropy using the modified functions
+        ssim_value = calculate_ssim(image, contrast_image)
+        psnr_value = calculate_psnr(image, contrast_image)
+        mse_value = calculate_mse(image, contrast_image)
+        entropy_value_original = calculate_entropy(image)
+        entropy_value_dehazed = calculate_entropy(contrast_image)
+        ssim = round(ssim_value, 4)
+        psnr = round(psnr_value, 4)
+        mse = round(mse_value, 4)
+        entropy_original = round(entropy_value_original,4)
+        entropy_dehazed = round(entropy_value_dehazed, 4)
+
+        metrics_data = {
+            "ssim": ssim,
+            "psnr": psnr,
+            "mse": mse,
+            "entrophy_original": entropy_original,
+            "entropy_dehazed": entropy_dehazed
+        }
+        print(metrics_data)
 
         # Encode the enhanced image as JPEG
         _, encoded_image = cv2.imencode('.jpg', contrast_image)
@@ -396,8 +486,11 @@ def process_image():
         # Create a BytesIO object to store the image
         image_buffer = BytesIO(encoded_image.tobytes())
 
-        # Return the enhanced image as a response
-        return send_file(image_buffer, mimetype='image/jpeg'), 200
+        # Send the image as a file response
+        image_response = send_file(image_buffer, mimetype='image/jpeg')
+        print("Response Data:", metrics_data)
+        # Return the metrics data as a separate JSON response
+        return (image_response, 200, {"metrics_data": metrics_data})
 
     except Exception as e:
         return jsonify(message='Error processing the image'), 500

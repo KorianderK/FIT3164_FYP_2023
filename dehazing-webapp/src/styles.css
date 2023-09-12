@@ -229,3 +229,7 @@ body {
   align-items: center;
   z-index: 10000; /* Adjust the z-index to ensure it's above other content */
 }
+.blur-background {
+  filter: blur(1px); /* Adjust the blur amount as needed */
+  pointer-events: none; /* Allow interactions with elements behind the blur */
+}
