@@ -11,6 +11,7 @@ function DCP() {
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [showComparison, setShowComparison] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false); 
+  const [metricsData, setMetricsData] = useState(null);
 
   // Function to toggle the comparison overlay
   const toggleComparisonOverlay = () => {
@@ -55,19 +56,30 @@ function DCP() {
       return;
     }
     setIsLoading(true);
-
+  
     try {
       const response = await fetch('http://127.0.0.1:5000/api/process-image', {
         method: 'POST',
         body: formData,
       });
-
+  
       if (response.status === 200) {
-        const result = await response.blob();
-        setTimeout(() => {
-          setDehazedImage(URL.createObjectURL(result));
-          setIsLoading(false);
-        }, 200);
+        const result = await response.json(); // Parse the JSON response
+  
+        // Decode the base64 image data
+        const decodedImageData = atob(result.image);
+        
+        // Create a blob from the decoded image data
+        const blob = new Blob([new Uint8Array([...decodedImageData].map(char => char.charCodeAt(0)))], {
+          type: 'image/jpeg',
+        });
+  
+        // Create a URL from the blob
+        setDehazedImage(URL.createObjectURL(blob));
+  
+        setMetricsData(result.metrics_data); // Set metrics data in state
+        setIsLoading(false);
+        
       } else {
         console.error('Error processing the image.');
         setIsLoading(false);
@@ -78,8 +90,6 @@ function DCP() {
     }
   };
   
-  
-
   const calculateAspectRatio = (image) => {
     return image.width / image.height;
   };
@@ -156,10 +166,11 @@ function DCP() {
   
       {showComparison && (
         <ComparisonOverlay
-          originalImage={file}
-          processedImage={dehazedImage}
-          onClose={toggleComparisonOverlay}
-          imageDimensions={imageDimensions}
+          originalImage = {file}
+          processedImage = {dehazedImage}
+          onClose = {toggleComparisonOverlay}
+          imageDimensions = {imageDimensions}
+          metricsData = {metricsData}
         />
       )}
     </div>

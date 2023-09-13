@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, Response
 import cv2
 import json
 import numpy as np
 from flask_cors import CORS
 from io import BytesIO
 from skimage import io, color, img_as_float
+import base64
 from skimage.metrics import structural_similarity as ssim
 
 app = Flask(__name__)
@@ -464,33 +465,33 @@ def process_image():
         psnr_value = calculate_psnr(image, contrast_image)
         mse_value = calculate_mse(image, contrast_image)
         entropy_value_original = calculate_entropy(image)
-        entropy_value_dehazed = calculate_entropy(contrast_image)
-        ssim = round(ssim_value, 4)
-        psnr = round(psnr_value, 4)
-        mse = round(mse_value, 4)
-        entropy_original = round(entropy_value_original,4)
-        entropy_dehazed = round(entropy_value_dehazed, 4)
+        entropy_value_dehazed = calculate_entropy(enhanced_image)
 
+        # Convert float32 values to native float
         metrics_data = {
-            "ssim": ssim,
-            "psnr": psnr,
-            "mse": mse,
-            "entrophy_original": entropy_original,
-            "entropy_dehazed": entropy_dehazed
+            "ssim": float(ssim_value),
+            "psnr": float(psnr_value),
+            "mse": float(mse_value),
+            "entropy_original": float(entropy_value_original),
+            "entropy_dehazed": float(entropy_value_dehazed)
         }
-        print(metrics_data)
+        # Convert metrics_data to JSON
+        metrics_data_json = json.dumps(metrics_data)
 
         # Encode the enhanced image as JPEG
-        _, encoded_image = cv2.imencode('.jpg', contrast_image)
+        _, encoded_image = cv2.imencode('.jpg', enhanced_image)
 
-        # Create a BytesIO object to store the image
-        image_buffer = BytesIO(encoded_image.tobytes())
+        # Convert the image to base64
+        image_base64 = base64.b64encode(encoded_image.tobytes()).decode('utf-8')
 
-        # Send the image as a file response
-        image_response = send_file(image_buffer, mimetype='image/jpeg')
-        print("Response Data:", metrics_data)
-        # Return the metrics data as a separate JSON response
-        return (image_response, 200, {"metrics_data": metrics_data})
+        # Create a dictionary to store both the image and metrics_data
+        response_data = {
+            "image": image_base64,  # Store the image as a base64-encoded string
+            "metrics_data": metrics_data_json
+        }
+
+        # Return response_data as a JSON response
+        return jsonify(response_data)
 
     except Exception as e:
         return jsonify(message='Error processing the image'), 500
