@@ -233,3 +233,17 @@ body {
   filter: blur(1px); /* Adjust the blur amount as needed */
   pointer-events: none; /* Allow interactions with elements behind the blur */
 }
+
+/* Adjust the width and margins as needed */
+.horizontal-drop-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* You can set a fixed width or a percentage */
+  margin-top: 10px;
+}
+
+/* Styles for the drop areas */
+.horizontal-drop-container .drop-area {
+  width: calc(50% - 10px); /* Adjust the width as needed */
+}

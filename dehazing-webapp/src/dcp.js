@@ -121,9 +121,9 @@ function DCP() {
           <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
             <i className="upload icon"></i>
             <h1>DCP + CLAHE Image Dehazer</h1>
-            <p>Drag & Drop an Image or</p>
+            <p>Drag & Drop your Image or</p>
             <label htmlFor="fileInput" className='select-image-text'>
-              Select Image
+              Select Image Here
             </label>
             <input
               id="fileInput"

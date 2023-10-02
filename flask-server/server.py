@@ -7,6 +7,15 @@ from io import BytesIO
 from skimage import io, color, img_as_float
 import base64
 from skimage.metrics import structural_similarity as ssim
+from PIL import Image, ImageEnhance, ImageOps
+from torchvision.models import vgg16
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, Dataset
+import os
+from torchvision import transforms
+import numpy as np
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -461,9 +470,9 @@ def process_image():
         contrast_image = increase_contrast(enhanced_image, alpha=1.15)
 
         # Calculate SSIM, PSNR, MSE, and entropy using the modified functions
-        ssim_value = calculate_ssim(image, contrast_image)
-        psnr_value = calculate_psnr(image, contrast_image)
-        mse_value = calculate_mse(image, contrast_image)
+        ssim_value = calculate_ssim(image, enhanced_image)
+        psnr_value = calculate_psnr(image, enhanced_image)
+        mse_value = calculate_mse(image, enhanced_image)
         entropy_value_original = calculate_entropy(image)
         entropy_value_dehazed = calculate_entropy(enhanced_image)
 
@@ -487,6 +496,125 @@ def process_image():
         # Create a dictionary to store both the image and metrics_data
         response_data = {
             "image": image_base64,  # Store the image as a base64-encoded string
+            "metrics_data": metrics_data_json
+        }
+
+        # Return response_data as a JSON response
+        return jsonify(response_data)
+
+    except Exception as e:
+        return jsonify(message='Error processing the image'), 500
+    
+# Generator model class
+class DehazingGenerator(nn.Module):
+    def __init__(self):
+        super(DehazingGenerator, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(64, 3, kernel_size=3, stride=1, padding=1)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = nn.ReLU()(x)
+        x = self.conv2(x)
+        return x
+    
+def save_image(tensor):
+    img = tensor.clone().cpu().detach().numpy()
+    img = img.transpose(1, 2, 0)
+    img = (img * 255).astype(np.uint8)
+    np.clip(img, 0, 255, out=img)
+    img = Image.fromarray(img)
+    return img
+
+# Function to dehaze an image and return dehazed image and metrics
+def dehaze_image_gan(image_path, model_path):
+    transform = transforms.Compose([transforms.ToTensor()])
+    # Load the trained model
+    model = DehazingGenerator()
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
+
+    # Preprocess the image
+    hazy_img = Image.open(image_path)
+    enhancer = ImageEnhance.Contrast(hazy_img)
+    hazy_img = enhancer.enhance(2.0)
+    hazy_img = ImageOps.autocontrast(hazy_img)
+    hazy_img = transform(hazy_img)
+    hazy_img = hazy_img.unsqueeze(0)  # Add a batch dimension
+
+    # Dehaze the image
+    with torch.no_grad():
+        dehazed_img = model(hazy_img)
+    dehazed_img_final = save_image(dehazed_img.squeeze())
+
+    return dehazed_img_final
+def image_to_base64(image):
+    # Convert a PIL image to a base64-encoded string
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    return image_base64
+    
+@app.route('/api/process-image-gan', methods=['POST'])
+def process_image_gan():
+    if 'image2' not in request.files:
+        return jsonify(message='No file part'), 400
+
+    image1 = request.files['image1']
+    image2 = request.files['image2']
+
+    if image1.filename and image2.filename == '':
+        return jsonify(message='No selected file'), 400
+
+    try:
+        image_np1 = np.fromfile(image1, np.uint8)
+        image1_np1 = cv2. imdecode(image_np1, cv2.IMREAD_COLOR)
+        image_np2 = np.fromfile(image2, np.uint8)
+        image2_np2 = cv2.imdecode(image_np2, cv2.IMREAD_COLOR)
+
+        # Define the path to your GAN model weights
+        model_path = 'dehazing_generator.pth'
+
+        # # Check if the file exists
+        # if os.path.exists(model_path):
+        #     print(f"The model weights file '{model_path}' exists.")
+        # else:
+        #     print(f"The model weights file '{model_path}' does not exist. Please provide the correct path.")
+        # Dehaze the input image
+        dehazed_image = dehaze_image_gan(image2, model_path)
+
+        dehazed_image_arr = np.asarray(dehazed_image)
+
+        # Calculate SSIM, PSNR, MSE, and entropy using the modified functions
+        ssim_value = calculate_ssim(image1_np1 , dehazed_image_arr)
+        psnr_value = calculate_psnr(image1_np1, dehazed_image_arr)
+        mse_value = calculate_mse(image1_np1 , dehazed_image_arr)
+        entropy_value_original = calculate_entropy(image1_np1)
+        entropy_value_dehazed = calculate_entropy(dehazed_image_arr)
+
+        # Convert float32 values to native float
+        metrics_data = {
+            "ssim": float(ssim_value),
+            "psnr": float(psnr_value),
+            "mse": float(mse_value),
+            "entropy_original": float(entropy_value_original),
+            "entropy_dehazed": float(entropy_value_dehazed)
+        }
+
+        # Convert metrics_data to JSON
+        metrics_data_json = json.dumps(metrics_data)
+
+        # # Encode the dehazed image as JPEG
+        # _, encoded_image = cv2.imencode('.jpg', dehazed_image_arr)
+
+        # # Convert the image to base64
+        # image_base64 = base64.b64encode(encoded_image.tobytes()).decode('utf-8')
+        dehazed_image_base64 = image_to_base64(dehazed_image)
+
+
+        # Create a dictionary to store both the image and metrics
+        response_data = {
+            "image": dehazed_image_base64,  # Store the image as a base64-encoded string
             "metrics_data": metrics_data_json
         }
 
