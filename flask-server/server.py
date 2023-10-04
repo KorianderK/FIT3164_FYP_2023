@@ -573,7 +573,7 @@ def process_image_gan():
         image2_np2 = cv2.imdecode(image_np2, cv2.IMREAD_COLOR)
 
         # Define the path to your GAN model weights
-        model_path = 'dehazing_generator.pth'
+        model_path = 'dehazing_generator_improved.pth'
 
         # # Check if the file exists
         # if os.path.exists(model_path):
@@ -585,20 +585,32 @@ def process_image_gan():
 
         dehazed_image_arr = np.asarray(dehazed_image)
 
-        # Calculate SSIM, PSNR, MSE, and entropy using the modified functions
-        ssim_value = calculate_ssim(image1_np1 , dehazed_image_arr)
-        psnr_value = calculate_psnr(image1_np1, dehazed_image_arr)
-        mse_value = calculate_mse(image1_np1 , dehazed_image_arr)
-        entropy_value_original = calculate_entropy(image1_np1)
-        entropy_value_dehazed = calculate_entropy(dehazed_image_arr)
+        # Calculate SSIM, PSNR, MSE, and entropy using the modified functions for ground truth image vs dehazed image.
+        ssim_value_gtvd = calculate_ssim(image1_np1 , dehazed_image_arr)
+        psnr_value_gtvd = calculate_psnr(image1_np1, dehazed_image_arr)
+        mse_value_gtvd = calculate_mse(image1_np1 , dehazed_image_arr)
+        entropy_value_original_gtvd = calculate_entropy(image1_np1)
+        entropy_value_dehazed_gtvd = calculate_entropy(dehazed_image_arr)
+
+        # Calculate SSIM, PSNR, MSE, and entropy using the modified functions for hazy image vs dehazed image.
+        ssim_value_hvd = calculate_ssim(image2_np2 , dehazed_image_arr)
+        psnr_value_hvd = calculate_psnr(image2_np2, dehazed_image_arr)
+        mse_value_hvd = calculate_mse(image2_np2 , dehazed_image_arr)
+        entropy_value_original_hvd = calculate_entropy(image2_np2)
+        entropy_value_dehazed_hvd = calculate_entropy(dehazed_image_arr)
 
         # Convert float32 values to native float
         metrics_data = {
-            "ssim": float(ssim_value),
-            "psnr": float(psnr_value),
-            "mse": float(mse_value),
-            "entropy_original": float(entropy_value_original),
-            "entropy_dehazed": float(entropy_value_dehazed)
+            "ssim_gtvd": float(ssim_value_gtvd),
+            "psnr_gtvd": float(psnr_value_gtvd),
+            "mse_gtvd": float(mse_value_gtvd),
+            "entropy_original_gtvd": float(entropy_value_original_gtvd),
+            "entropy_dehazed_gtvd": float(entropy_value_dehazed_gtvd),
+            "ssim_hvd": float(ssim_value_hvd),
+            "psnr_hvd": float(psnr_value_hvd),
+            "mse_hvd": float(mse_value_hvd),
+            "entropy_hazy": float(entropy_value_original_hvd),
+            "entropy_dehazed": float(entropy_value_dehazed_hvd)
         }
 
         # Convert metrics_data to JSON
