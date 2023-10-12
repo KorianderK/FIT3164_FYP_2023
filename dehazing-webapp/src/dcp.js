@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
 import ComparisonOverlay from './Comparisonoverlay';
 import './styles.css';
+import './backgroundanimation.css';
 
 function DCP() {
   const [file, setFile] = useState(null);
@@ -116,6 +117,9 @@ function DCP() {
 
   return (
     <div>
+      <div class="bg"></div>
+      <div class="bg bg2"></div>
+      <div class="bg bg3"></div>
       <div className={`App fade-in ${isBlurred ? 'blur-background' : ''}`}>
 
         {!file ? (

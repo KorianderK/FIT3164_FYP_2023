@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
 import ComparisonOverlayGAN from './Comparisonoverlaygan';
 import './styles.css';
+import './backgroundanimation.css';
 
 function GAN() {
   const [file1, setFile1] = useState(null); // First image
@@ -123,6 +124,9 @@ function GAN() {
 
   return (
     <div>
+            <div class="bg"></div>
+            <div class="bg bg2"></div>
+            <div class="bg bg3"></div>
       <div className={`App ${isBlurred ? 'blur-background' : ''}`}>
         <div className="image-container fade-in">
           <div className="horizontal-drop-container">

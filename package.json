@@ -8,6 +8,7 @@
     "classnames": "^2.3.2",
     "prop-types": "^15.8.1",
     "react-router-dom": "^6.15.0",
+    "react-tsparticles": "^2.12.2",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "web-vitals": "^3.4.0"
