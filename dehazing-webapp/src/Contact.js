@@ -3,7 +3,7 @@ import './contact.css'
 
 function Contact() {
   return (
-    <div className="contact-container">
+    <div className="contact-container fade-in">
       <header className="contact-image">
         <h1 className="contact-app-title">Contact Us</h1>
         <p>If you have any questions or feedback, please feel free to contact us using the email address below:</p>

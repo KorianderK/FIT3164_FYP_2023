@@ -80,7 +80,6 @@ body {
   background-color: rgb(194, 194, 194);
 }
 
-/* Add these styles to your existing CSS */
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -195,25 +194,24 @@ body {
   color: black
 }
 
-/* styles.css or your custom CSS file */
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.7); /* You can adjust the background color and opacity as needed */
+  background: rgba(255, 255, 255, 0.7); 
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  z-index: 1000; /* Adjust the z-index to ensure it's above other content */
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
 }
 
 .loading-container {
   display: flex;
-  flex-direction: column; /* Display children vertically */
-  align-items: center; /* Center horizontally */
-  text-align: center; /* Center text */
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
 }
 
 .loading-spinner {
@@ -258,7 +256,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* You can set a fixed width or a percentage */
+  width: 100%; 
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
@@ -282,3 +280,20 @@ body {
   display: flex;
   justify-content: center;
 }
+
+.gan-footer {
+  padding: 20px 0;
+  background-color: #333;
+  color: #fff;
+  margin-top: 530px;
+  text-align: center;
+}
+
+.dcp-footer {
+  padding: 20px 0;
+  background-color: #333;
+  color: #fff;
+  margin-top: 550px;
+  text-align: center;
+}
+

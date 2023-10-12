@@ -15,7 +15,7 @@ function Landingpage() {
   };
 
   return (
-    <div className="home-container">
+    <div className="home-container fade-in">
       <header className="hero">
         <h1 className="app-title">ClearView: Effective Dehazing Solutions</h1>
         <p className="app-description">Enhance your photos by removing haze and improving clarity, performance metrics included!</p>

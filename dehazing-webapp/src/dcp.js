@@ -116,7 +116,8 @@ function DCP() {
 
   return (
     <div>
-      <div className={`App ${isBlurred ? 'blur-background' : ''}`}>
+      <div className={`App fade-in ${isBlurred ? 'blur-background' : ''}`}>
+
         {!file ? (
           <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
             <i className="upload icon"></i>
@@ -173,6 +174,9 @@ function DCP() {
           metricsData = {metricsData}
         />
       )}
+            <footer className="dcp-footer fade-in">
+        <p>&copy; 2023 MDS-13. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

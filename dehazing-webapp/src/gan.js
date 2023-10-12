@@ -226,6 +226,7 @@ function GAN() {
           </>
         )}
 
+
       </div>
     </div>
 
@@ -239,7 +240,11 @@ function GAN() {
           metricsData={metricsData}
         />
       )}
+      <footer className="gan-footer fade-in">
+        <p>&copy; 2023 MDS-13. All rights reserved.</p>
+      </footer>
     </div>
+
   );
 }
 

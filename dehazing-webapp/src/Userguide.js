@@ -3,7 +3,7 @@ import './userguide.css';
 
 function Userguide() {
   return (
-    <div className="user-guide-container">
+    <div className="user-guide-container fade-in">
       <header className="user-image">
         <h1 className="user-app-title">User Guide</h1>
         <p className="user-guide-description">Learn how to enhance your images by following our step-by-step instructions.</p>
