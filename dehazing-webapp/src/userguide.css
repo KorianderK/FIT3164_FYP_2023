@@ -1,0 +1,55 @@
+    /* Home.css */
+
+.user-guide-container {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+  
+  .user-image {
+    background-image: url('pexels-photo-3184639.jpg'); /* Set your background image */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 268px 0;
+  }
+  
+  .user-app-title {
+    font-size: 36px;
+    margin-bottom: 5px;
+  }
+  
+  .user-guide-description {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .user-features {
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 0;
+  }
+  
+  .user-feature {
+    width: 24%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-feature h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .user-feature p {
+    font-size: 16px;
+  }
+  
+  .user-footer {
+    padding: 20px 0;
+    background-color: #333;
+    color: #fff;
+  }
+  

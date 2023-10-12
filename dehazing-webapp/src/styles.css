@@ -7,6 +7,7 @@ body {
 }
 
 .App {
+  margin-top: auto;
   text-align: center;
   padding: 20px;
   display: flex;
@@ -61,6 +62,22 @@ body {
 .remove-button:hover,
 .process-button:hover {
   background-color: #258e2c;
+}
+
+.metrics-button {
+  background-color: lightgrey;
+  color: #474747;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.metrics-button:hover {
+  background-color: rgb(194, 194, 194);
 }
 
 /* Add these styles to your existing CSS */
@@ -162,6 +179,8 @@ body {
   text-align: center;
   cursor: pointer;
   margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .drop-area p {
@@ -241,6 +260,8 @@ body {
   align-items: center;
   width: 100%; /* You can set a fixed width or a percentage */
   margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* Styles for the drop areas */
@@ -248,3 +269,16 @@ body {
   width: calc(50% - 10px); /* Adjust the width as needed */
 }
 
+.metrics-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.metrics-section {
+  margin-right: 20px; /* Adjust the margin as needed to create space between the sections */
+}
+
+.centered-metrics {
+  display: flex;
+  justify-content: center;
+}

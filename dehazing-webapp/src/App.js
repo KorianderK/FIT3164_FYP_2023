@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import About from './About';
 import Landingpage from './Landing';
 import Userguide from './Userguide';
 import Contact from './Contact';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import Team from './Team';
 import DCP from './dcp';
 import GAN from './gan';
 import Loading from './Loading';
@@ -55,10 +53,8 @@ function App() {
                 <Route path='/' element={<Navigate to='/home' replace />} />
                 <Route path='/home' element={<Landingpage />} />
                 <Route path='/landing' element={<Landingpage />} />
-                <Route path='/team' element={<Team />} />
                 <Route path='/userguide' element={<Userguide />} />               
                 <Route path='/contact' element={<Contact />} />
-                <Route path='/about' element={<About />} />
                 <Route path='/image-dehaze-dcp' element={<DCP />} />
                 <Route path='/image-dehaze-gan' element={<GAN />} />
               </Routes>

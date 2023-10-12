@@ -46,29 +46,31 @@ function ComparisonOverlayGAN({ gtImage, hazyImage, processedImage, onClose, met
             <img src={processedImage} alt="Second Original" className="resized-image" />
           </div>
         </div>
-        <button onClick={() => setShowMetrics(!showMetrics)}>
+        <button onClick={() => setShowMetrics(!showMetrics)} className='metrics-button fade-in'>
           {showMetrics ? 'Hide Performance Metrics' : 'Show Performance Metrics'}
         </button>
         
         {showMetrics && (
-          <>
-            <div>
-              <h3>Dehazing Performance Metrics (GT vs Dehazed)</h3>
-              <p>Structural Similarity Index: {roundedMetrics.ssim_gtvd}</p>
-              <p>Peak Signal-to-Noise Ratio: {roundedMetrics.psnr_gtvd}</p>
-              <p>Mean Squared Error: {roundedMetrics.mse_gtvd}</p>
-              <p>Entropy (GT): {roundedMetrics.entropy_original_gtvd}</p>
-              <p>Entropy (Dehazed): {roundedMetrics.entropy_dehazed_gtvd}</p>
+          <div className="centered-metrics">
+            <div className="metrics-container">
+              <div className="metrics-section">
+                <h3>Dehazing Performance Metrics (GT vs Dehazed)</h3>
+                <p>Structural Similarity Index: {roundedMetrics.ssim_gtvd}</p>
+                <p>Peak Signal-to-Noise Ratio: {roundedMetrics.psnr_gtvd}</p>
+                <p>Mean Squared Error: {roundedMetrics.mse_gtvd}</p>
+                <p>Entropy (GT): {roundedMetrics.entropy_original_gtvd}</p>
+                <p>Entropy (Dehazed): {roundedMetrics.entropy_dehazed_gtvd}</p>
+              </div>
+              <div className="metrics-section">
+                <h3>Dehazing Performance Metrics (Hazy vs Dehazed)</h3>
+                <p>Structural Similarity Index: {roundedMetrics.ssim_hvd}</p>
+                <p>Peak Signal-to-Noise Ratio: {roundedMetrics.psnr_hvd}</p>
+                <p>Mean Squared Error: {roundedMetrics.mse_hvd}</p>
+                <p>Entropy (Hazy): {roundedMetrics.entropy_hazy}</p>
+                <p>Entropy (Dehazed): {roundedMetrics.entropy_dehazed}</p>
+              </div>
             </div>
-            <div>
-              <h3>Dehazing Performance Metrics (Hazy vs Dehazed)</h3>
-              <p>Structural Similarity Index: {roundedMetrics.ssim_hvd}</p>
-              <p>Peak Signal-to-Noise Ratio: {roundedMetrics.psnr_hvd}</p>
-              <p>Mean Squared Error: {roundedMetrics.mse_hvd}</p>
-              <p>Entropy (Hazy): {roundedMetrics.entropy_hazy}</p>
-              <p>Entropy (Dehazed): {roundedMetrics.entropy_dehazed}</p>
-            </div>
-          </>
+          </div>
         )}
       </div>
     </div>

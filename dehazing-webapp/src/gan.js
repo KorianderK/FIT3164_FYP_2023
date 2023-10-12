@@ -136,7 +136,7 @@ function GAN() {
                 >
                 <>
                   <i className="upload icon"></i>
-                  <h1>Upload Image (GT)</h1>
+                  <h1>GAN Clear</h1>
                   <p>Drag & Drop your image here or</p>
                   <label htmlFor="fileInput1" className="select-image-text">
                     Select Ground Truth Image
@@ -175,7 +175,7 @@ function GAN() {
               >
                 <>
                   <i className="upload icon"></i>
-                  <h1>Upload Image (Hz)</h1>
+                  <h1>GAN Hazy</h1>
                   <p>Drag & Drop your image here or</p>
                   <label htmlFor="fileInput2" className="select-image-text">
                     Select Hazy Image

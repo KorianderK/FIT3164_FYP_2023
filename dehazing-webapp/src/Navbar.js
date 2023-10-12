@@ -42,7 +42,7 @@ function Navbar(props) {
         style={{ textDecoration: 'none' }}
         onClick={handleLinkClick}
       >
-        <p style={textStyles}>Image Dehazer Webapp V1.4</p>
+        <p style={textStyles}>ClearView</p>
       </Link>
     </div>
   );

@@ -120,7 +120,7 @@ function DCP() {
         {!file ? (
           <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
             <i className="upload icon"></i>
-            <h1>DCP + CLAHE Image Dehazer</h1>
+            <h1>DCP Image Dehazer</h1>
             <p>Drag & Drop your Image or</p>
             <label htmlFor="fileInput" className='select-image-text'>
               Select Image Here
