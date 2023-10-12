@@ -13,7 +13,7 @@ function Contact() {
 
       </section>
       <footer className="contact-footer">
-      <p>&copy; 2023 MDS-13. All rights reserved.</p>
+      <p>&copy; 2023 ClearView MDS-13. All rights reserved.</p>
       </footer>
     </div>
   );
