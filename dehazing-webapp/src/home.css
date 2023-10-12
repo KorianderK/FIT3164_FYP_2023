@@ -7,11 +7,12 @@
   }
   
   .hero {
-    background-image: url('https://metro.co.uk/wp-content/uploads/2018/06/gettyimages-682966492.jpg?quality=90&strip=all'); /* Set your background image */
+    /* background-image: url('https://metro.co.uk/wp-content/uploads/2018/06/gettyimages-682966492.jpg?quality=90&strip=all'); */
     background-size: cover;
     background-position: center;
     color: #fff;
     padding: 240px 0;
+    transition: background-image 3s ease-in-out;
   }
   
   .app-title {
