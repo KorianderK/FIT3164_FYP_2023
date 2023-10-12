@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './home.css';
 import Loading from './Loading';
-import './backgroundanimation.css';
 
 // Define an array of image URLs
 const images = [
@@ -50,9 +49,6 @@ function Landingpage() {
         <a href="/userguide" onClick={handleGetStartedClick} className="cta-button">User Guide</a>
       </header>
       <section className="features">
-      <div class="bg"></div>
-            <div class="bg bg2"></div>
-            <div class="bg bg3"></div>
         <div className="feature">
           <h2>Easy to Use</h2>
           <p>User-friendly interface makes dehazing images a breeze.</p>
@@ -69,7 +65,6 @@ function Landingpage() {
       <footer className="footer">
         <p>&copy; 2023 ClearView MDS-13. All rights reserved.</p>
       </footer>
-
       {showLoading && <Loading />}
     </div>
   );
